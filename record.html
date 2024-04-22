@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>纯CSS实现类似于唱片的效果</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+    <!-- require MetingJS -->
+    <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+</head>
+<style type="text/css">
+    .main-circle{
+        width: 200px;
+        height: 200px;
+        /*定义动画效果，对应的"infinite",动画无限次播放，对应的"linear",动画从头到尾的速度是相同的。*/
+        animation: circle 6s infinite linear;
+        border-radius: 100%;
+        display: flex;
+        animation-play-state: paused;
+        justify-content: center;
+        align-items: center;
+        background-color: #81cac3;
+        /*重复径向渐变 从中心开始沿着四周产生渐变效果，模拟出唱片那种感觉，不喜欢可以注释或删掉*/
+        background: repeating-radial-gradient(#81cac3 0%, #81cac3 5%);
+    }
+    .circle{
+        width: 15px;
+        height: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        border-radius: 100%;
+        background-color: #c43739;
+        /*看不出旋转效果，所以使用图片*/
+        background-size: cover;
+    }
+    /*白色圆心，不需要可以直接删除，或者把背景色删掉或改为透明*/
+    .circle-heart{
+        width: 10px;
+        height: 10px;
+        margin: 0 auto;
+        border-radius: 100%;
+        background-color: #FFF;
+    }
+    @keyframes circle{
+        0%{
+            /*transform对元素进行旋转、缩放、移动或倾斜。以下就是旋转0度。*/
+            transform: rotate(0deg);
+        }
+        100%{
+            /*以下就是旋转360度*/
+            transform: rotate(360deg);
+        }
+    }
+
+    .aplayer.aplayer-narrow {
+        border-radius: 50%;
+    }
+
+    .aplayer-pause {
+        left: 22px!important;
+        top: 23px!important;
+
+    }
+</style>
+<body>
+    <div style="width:500px;height:500px;margin: 0 auto;">
+        <div class="main-circle">
+            <div class="circle">
+<!--                <div class="circle-heart">-->
+                    <div class=".circle-heart">
+                        <div id="aplayer"></div>
+                    </div>
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+
+<script>
+    // 初始化APlayer
+    var player = new APlayer({
+      container: document.getElementById('aplayer'),
+      mini: true,
+      autoplay: true, // 尝试自动播放
+      loop: 'all',
+      volume: 0.6,
+      theme: '#333333',
+      audio: [{
+        name: 'song name',
+        artist: 'artist name',
+        url: 'https://rainymood.com/audio1112/0.mp3',
+      }]
+    });
+
+    var recordPlayer = document.querySelector('.main-circle');
+
+    // 控制唱片旋转
+    player.on('play', function () {
+      recordPlayer.style.animationPlayState = 'running';
+    });
+
+    player.on('pause', function () {
+      recordPlayer.style.animationPlayState = 'paused';
+    });
+
+    // 页面加载完毕后尝试播放
+    window.onload = function() {
+        player.play();
+    };
+</script>
+</body>
+</html>

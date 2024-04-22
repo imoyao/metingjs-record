@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Record Player Animation</title>
+<!-- require APlayer -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+<style>
+    .record-player {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        animation: spin 20s linear infinite;
+        animation-play-state: paused;
+        border-radius: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: black;
+        /* 更加细腻的线条效果和明暗对比 */
+        background: radial-gradient(circle, #111 0%, #000 5%, #333 10%, #000 15%, #111 20%, #000 25%, #333 30%, #000 35%, #111 40%, #000 45%, #333 50%, #000 55%, #111 60%, #000 65%, #333 70%, #000 75%, #111 80%, #000 85%, #333 90%, #000 95%, #111 100%);
+    }
+
+    .aplayer {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    aplayer.aplayer-narrow .aplayer-body, .aplayer.aplayer-narrow .aplayer-pic {
+        border-radius: 50%;
+    }
+
+    .aplayer.aplayer-narrow {
+    border-radius: 50% !important;
+}
+</style>
+</head>
+<body>
+
+<div class="record-player">
+    <div id="aplayer"></div>
+</div>
+
+<script>
+    // 初始化APlayer
+    var player = new APlayer({
+      container: document.getElementById('aplayer'),
+      mini: true,
+      autoplay: true, // 尝试自动播放
+      loop: 'none',
+      volume: 0.6,
+      theme: '#333333',
+      audio: [{
+        name: 'song name',
+        artist: 'artist name',
+        url: 'song.mp3',
+        cover: 'cover.jpg'
+      }]
+    });
+
+    var recordPlayer = document.querySelector('.record-player');
+
+    // 控制唱片旋转
+    player.on('play', function () {
+      recordPlayer.style.animationPlayState = 'running';
+    });
+
+    player.on('pause', function () {
+      recordPlayer.style.animationPlayState = 'paused';
+    });
+
+    // 页面加载完毕后尝试播放
+    window.onload = function() {
+        player.play();
+    };
+</script>
+
+</body>
+</html>
